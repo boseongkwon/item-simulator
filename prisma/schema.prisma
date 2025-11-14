@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  code      Int      @unique @db.UnsignedInt
+  name      String   @unique
+  health    Int      @db.UnsignedInt
+  power     Int      @db.UnsignedInt
+  price     Int      @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  characterInventories CharacterInventory[]
+  characterItems       CharacterItem[]
+
+  @@map("items")
+}
+
+model User {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  username  String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  characters Character[]
+
+  @@map("users")
+}
+
+model Character {
+  id        Int      @id @default(autoincrement()) @db.UnsignedInt
+  userId    Int      @map("user_id") @db.UnsignedInt
+  name      String   @unique
+  health    Int      @default(500) @db.UnsignedInt
+  power     Int      @default(100) @db.UnsignedInt
+  money     Int      @default(10000) @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  inventories CharacterInventory[]
+  items       CharacterItem[]
+
+  @@map("characters")
+}
+
+model CharacterInventory {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  itemId      Int      @map("item_id") @db.UnsignedInt
+  characterId Int      @map("character_id") @db.UnsignedInt
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  item      Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@map("character_inventories")
+}
+
+model CharacterItem {
+  id          Int      @id @default(autoincrement()) @db.UnsignedInt
+  itemId      Int      @map("item_id") @db.UnsignedInt
+  characterId Int      @map("character_id") @db.UnsignedInt
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  item      Item      @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  character Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, characterId])
+  @@map("character_items")
+}
