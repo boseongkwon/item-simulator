@@ -1,11 +1,11 @@
 import express from 'express';
-import authenticator from '../middlewares/authenticator.js';
+import { optionalAuth, requiredAuth } from '../middlewares/authenticator.js';
 import { characterSchema } from '../utils/joi.js';
 import prisma from '../utils/prisma.js';
 
 const router = express.Router(``);
 
-router.post('/characters', authenticator, async (req, res, next) => {
+router.post('/characters', requiredAuth, async (req, res, next) => {
   try {
     const { name } = req.body;
     const userId = req.user.id;
@@ -38,7 +38,7 @@ router.post('/characters', authenticator, async (req, res, next) => {
   }
 });
 
-router.delete('/characters/:id', authenticator, async (req, res, next) => {
+router.delete('/characters/:id', requiredAuth, async (req, res, next) => {
   try {
     const id = +req.params.id;
     const userId = req.user.id;
@@ -50,6 +50,44 @@ router.delete('/characters/:id', authenticator, async (req, res, next) => {
     }
 
     return res.status(200).json({ success: true, message: 'deleted successfully' });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+router.get('/characters/:id', optionalAuth, async (req, res, next) => {
+  try {
+    const id = +req.params.id;
+    const userId = req.user?.id;
+
+    // find character by id
+    const character = await prisma.character.findUnique({
+      where: { id },
+      select: {
+        userId: true,
+        name: true,
+        health: true,
+        power: true,
+        money: true,
+      },
+    });
+    if (!character) {
+      return res.status(404).json({ success: false, message: 'character not found' });
+    }
+
+    // common data
+    const data = {
+      name: character.name,
+      health: character.health,
+      power: character.power,
+    };
+
+    // data for the character's owner
+    if (userId === character.userId) {
+      data['money'] = character.money;
+    }
+
+    return res.status(200).json({ success: false, message: 'fetched successfully', data });
   } catch (err) {
     return next(err);
   }
