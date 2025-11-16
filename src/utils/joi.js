@@ -38,3 +38,17 @@ export const characterSchema = Joi.object({
     .max(20)
     .required(),
 });
+
+export const itemSchema = Joi.object({
+  code: Joi.number().integer().positive().required(),
+  name: Joi.string()
+    .pattern(/^[A-Za-z\d]+$/)
+    .min(2)
+    .max(40)
+    .required(),
+  stats: Joi.object({
+    health: Joi.number().integer().min(0).required(),
+    power: Joi.number().integer().min(0).required(),
+  }),
+  price: Joi.number().integer().positive().required(),
+});

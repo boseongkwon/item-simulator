@@ -19,7 +19,7 @@ https://drawsql.app/teams/-1829/diagrams/item-simulator
 - [x] 3. 캐릭터 생성 API (JWT)
 - [x] 4. 캐릭터 삭제 API (JWT)
 - [x] 5. 캐릭터 상세 조회
-- [ ] 6. 아이템 생성 API
+- [x] 6. 아이템 생성 API
 - [ ] 7. 아이템 수정 API
 - [ ] 8. 아이템 목록 조회 API
 - [ ] 9. 아이템 상세 조회 API
