@@ -54,6 +54,8 @@ router.patch('/items/:code', async (req, res, next) => {
     // update item information
     await prisma.item.update({ where: { code }, data });
 
+    // if the item doesn't exist, it will be handled in the error handler
+
     return res.status(200).json({ success: true, message: 'updated successfully' });
   } catch (err) {
     return next(err);
