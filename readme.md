@@ -15,7 +15,7 @@ https://drawsql.app/teams/-1829/diagrams/item-simulator
 ## 필수 기능
 
 - [x] 1. 회원가입 API
-- [ ] 2. 로그인 API
+- [x] 2. 로그인 API
 - [ ] 3. 캐릭터 생성 API (JWT)
 - [ ] 4. 캐릭터 삭제 API (JWT)
 - [ ] 5. 캐릭터 상세 조회
