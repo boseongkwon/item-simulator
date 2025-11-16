@@ -71,4 +71,29 @@ router.get('/items', async (req, res, next) => {
   }
 });
 
+router.get('/items/:code', async (req, res, next) => {
+  try {
+    const code = +req.params.code;
+
+    const item = await prisma.item.findUnique({
+      where: { code },
+      select: { code: true, name: true, health: true, power: true, price: true },
+    });
+    if (!item) {
+      return res.status(404).json({ success: false, message: 'item not found' });
+    }
+
+    const data = {
+      code: item.code,
+      name: item.name,
+      stats: { health: item.health, power: item.power },
+      price: item.price,
+    };
+
+    return res.status(200).json({ success: true, message: 'fetched successfully', data });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 export default router;
