@@ -52,3 +52,14 @@ export const itemSchema = Joi.object({
   }),
   price: Joi.number().integer().positive().required(),
 });
+
+export const itemModifyingShcema = Joi.object({
+  name: Joi.string()
+    .pattern(/^[A-Za-z\d]+$/)
+    .min(2)
+    .max(30),
+  stats: Joi.object({
+    health: Joi.number().integer().min(0).default(0),
+    power: Joi.number().integer().min(0).default(0),
+  }),
+});
