@@ -38,4 +38,21 @@ router.post('/characters', authenticator, async (req, res, next) => {
   }
 });
 
+router.delete('/characters/:id', authenticator, async (req, res, next) => {
+  try {
+    const id = +req.params.id;
+    const userId = req.user.id;
+
+    // delete character
+    const { count } = await prisma.character.deleteMany({ where: { id, userId } });
+    if (!count) {
+      return res.status(404).json({ success: false, message: 'character not found' });
+    }
+
+    return res.status(200).json({ success: true, message: 'deleted successfully' });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 export default router;
