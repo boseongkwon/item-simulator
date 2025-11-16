@@ -60,4 +60,15 @@ router.patch('/items/:code', async (req, res, next) => {
   }
 });
 
+router.get('/items', async (req, res, next) => {
+  try {
+    // find items
+    const items = await prisma.item.findMany({ select: { code: true, name: true, price: true } });
+
+    return res.status(200).json({ success: true, message: 'fetched successfully', data: items });
+  } catch (err) {
+    return next(err);
+  }
+});
+
 export default router;

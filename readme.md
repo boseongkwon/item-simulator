@@ -21,7 +21,7 @@ https://drawsql.app/teams/-1829/diagrams/item-simulator
 - [x] 5. 캐릭터 상세 조회
 - [x] 6. 아이템 생성 API
 - [x] 7. 아이템 수정 API
-- [ ] 8. 아이템 목록 조회 API
+- [x] 8. 아이템 목록 조회 API
 - [ ] 9. 아이템 상세 조회 API
 
 ## 도전 기능
