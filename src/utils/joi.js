@@ -30,3 +30,11 @@ export const signinSchema = Joi.object({
     .max(30)
     .required(),
 });
+
+export const characterSchema = Joi.object({
+  name: Joi.string()
+    .pattern(/^[A-Za-z\d]+$/)
+    .min(2)
+    .max(20)
+    .required(),
+});
