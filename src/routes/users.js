@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { ACCESS_TOKEN_TTL, BCRYPT_SALT_ROUNDS, JWT_SECRET_KEY } from '../constants/env.js';
 import prisma from '../utils/prisma.js';
 import jwt from 'jsonwebtoken';
+import authenticator from '../middlewares/authenticator.js';
 
 const router = express.Router();
 
@@ -81,6 +82,17 @@ router.post('/sign-in', async (req, res, next) => {
     return res
       .status(200)
       .json({ success: true, message: 'signed in successfully', tokenType: 'Bearer', accessToken });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// test endpoint to validate jwt authentication middleware
+router.get('/authenticator', authenticator, (req, res, next) => {
+  try {
+    console.log(req.user);
+
+    return res.status(200).json({ success: true, message: 'authenticated successfully' });
   } catch (err) {
     return next(err);
   }
